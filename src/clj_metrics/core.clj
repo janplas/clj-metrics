@@ -34,3 +34,9 @@
 
 (defn dump-nr-of-lines [seq]
   (map #(nr-of-lines (% :src)) seq))
+
+(defn -main [& [args]]
+  ; TODO: do something with arguments!
+  (println "clj-metrics!")
+  (println args)
+  (dump-nr-of-lines (read-all-clj-files ".")))
