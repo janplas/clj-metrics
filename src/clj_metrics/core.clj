@@ -19,7 +19,7 @@
   [source]
   (nr-of-lines (filter str-utils/blank? source)))
 
-(def clj-pattern #".*\.clj")
+(def clj-pattern #"^[^.](.*)\.clj")
 
 (defn clojure-file? [file]
   (re-matches clj-pattern (.getName file)))
