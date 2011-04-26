@@ -36,7 +36,5 @@
   (map #(nr-of-lines (% :src)) seq))
 
 (defn -main [& [args]]
-  ; TODO: do something with arguments!
-  (println "clj-metrics!")
-  (println args)
-  (dump-nr-of-lines (read-all-clj-files ".")))
+  (let [dir (if args args ".")] 
+    (dump-nr-of-lines (read-all-clj-files dir))))
