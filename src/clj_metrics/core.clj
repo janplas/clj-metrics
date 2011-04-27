@@ -1,6 +1,7 @@
 (ns clj-metrics.core
   (:require [clojure.string :as str]
-            [clojure.contrib.string :as str-utils])
+            [clojure.contrib.string :as str-utils]
+            [org.danlarkin.json :as json])
   (:import (java.io File)))
 
 (defn read-source
@@ -61,9 +62,16 @@
 (defn get-nr-of-defns [seq]
   (map #(nr-of-defns (create-ast (% :src))) seq))
 
+; Fix me: next func should be generalised
+(defn merge
+  "Merge 2 sequences into list of maps with given labels"
+  [seq1 label1 seq2 label2]
+  (map (fn [x y] {(keyword label1) x (keyword label2) y}) seq1 seq2))
+
 (defn -main [& [args]]
   (let [dir (if args args ".")
         clj-files (read-all-clj-files dir)]
-    (println (get-paths clj-files))
-    (println (get-nr-of-lines clj-files))
+    (println (json/encode (merge (get-paths clj-files) "path"
+                                 (get-nr-of-lines clj-files) "loc")
+                          :indent 2))
     (println (get-nr-of-defns clj-files))))
