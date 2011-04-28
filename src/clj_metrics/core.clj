@@ -62,6 +62,7 @@
 (defn get-nr-of-defns [seq]
   (map #(nr-of-defns (create-ast (% :src))) seq))
 
+;dont call it merge: shadows a core function
 ; Fix me: next func should be generalised
 (defn merge
   "Merge 2 sequences into list of maps with given labels"
