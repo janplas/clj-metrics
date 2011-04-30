@@ -1,4 +1,5 @@
 (ns clj-metrics.core
+  (:use [clj-metrics.util])
   (:require [clojure.string :as str]
             [clojure.contrib.string :as str-utils]
             [org.danlarkin.json :as json])
@@ -69,8 +70,6 @@
   [func]
   (string? (nth func 2)))
 
-(def count-if (comp count filter))
-
 (defn nr-of-commented-defns
   "Count functions with comment string in file" 
   [ast]
@@ -81,12 +80,6 @@
 
 (defn get-nr-of-commented-defns [seq]
   (map #(nr-of-commented-defns (create-ast (% :src))) seq))
-
-; Fix me: next func should be generalised
-(defn merge-seq
-  "Merge 2 sequences into list of maps with given labels"
-  [seq1 label1 seq2 label2]
-  (map (fn [x y] {(keyword label1) x (keyword label2) y}) seq1 seq2))
 
 (defn -main [& [args]]
   (let [dir (if args args ".")
