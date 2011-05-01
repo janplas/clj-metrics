@@ -1,5 +1,5 @@
 (ns clj-metrics.core
-  (:use [clj-metrics.util])
+  (:use [clj-metrics.util] [clj-metrics.defn])
   (:require [clojure.string :as str]
             [clojure.contrib.string :as str-utils]
             [org.danlarkin.json :as json])
@@ -55,20 +55,20 @@
   [ast symbol-name]
   (count (filter #(= (symbol symbol-name) (first %)) ast)))
 
+(defn is-defn?
+  "Return true if this decl defines a function, otherwise false"
+  [decl]
+  (= (symbol "defn") (first decl)))
+
 (defn get-all-defns
   "Get all functions defined in this ast"
   [ast]
-  (filter #(= (symbol "defn") (first %)) ast))
+  (filter is-defn? ast))
 
 (defn nr-of-defns
   "Count functions in file" 
   [ast]
   (count (get-all-defns ast)))
-
-(defn has-comment?
-  "Returns true if func has a comment string, otherwise false"
-  [func]
-  (string? (nth func 2)))
 
 (defn nr-of-commented-defns
   "Count functions with comment string in file" 

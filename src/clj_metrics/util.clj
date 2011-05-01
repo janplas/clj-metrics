@@ -7,4 +7,5 @@
   "Merge 2 sequences into list of maps with given labels"
   [seq1 label1 seq2 label2]
   (map (fn [x y] {(keyword label1) x (keyword label2) y}) seq1 seq2))
-
+  
+  
