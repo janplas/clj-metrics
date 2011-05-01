@@ -55,11 +55,6 @@
   [ast symbol-name]
   (count (filter #(= (symbol symbol-name) (first %)) ast)))
 
-(defn is-defn?
-  "Return true if this decl defines a function, otherwise false"
-  [decl]
-  (= (symbol "defn") (first decl)))
-
 (defn get-all-defns
   "Get all functions defined in this ast"
   [ast]
