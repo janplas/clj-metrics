@@ -2,5 +2,7 @@
   (:use [clj-metrics.util] :reload)
   (:use [clojure.test]))
 
-(deftest replace-me ;; FIXME: write
-  (is false "No tests have been written."))
+(deftest test-count-if
+  (is (= (count-if #(< % 3) (range 7)) 3))
+  (is (= (count-if #(>= % 3) (range 7)) 4)))
+

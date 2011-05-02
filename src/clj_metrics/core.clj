@@ -82,4 +82,6 @@
     (println (json/encode (merge-seq (get-paths clj-files) "path"
                                      (get-nr-of-lines clj-files) "loc")
                           :indent 2))
-    (println (get-nr-of-defns clj-files))))
+    (println (json/encode (merge-seq (get-nr-of-defns clj-files) "defns"
+                                     (get-nr-of-commented-defns clj-files) "cdefns")
+                          :indent 2))))
