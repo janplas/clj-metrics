@@ -1,4 +1,5 @@
 (ns clj-metrics.core
+  (:use [clj-metrics.util] [clj-metrics.defn])
   (:require [clojure.string :as str]
             [clojure.contrib.string :as str-utils]
             [org.danlarkin.json :as json])
@@ -54,25 +55,33 @@
   [ast symbol-name]
   (count (filter #(= (symbol symbol-name) (first %)) ast)))
 
+(defn get-all-defns
+  "Get all functions defined in this ast"
+  [ast]
+  (filter is-defn? ast))
+
 (defn nr-of-defns
   "Count functions in file" 
   [ast]
-  (nr-of-toplevel-symbols ast "defn"))
+  (count (get-all-defns ast)))
 
+(defn nr-of-commented-defns
+  "Count functions with comment string in file" 
+  [ast]
+  (count-if has-comment? (get-all-defns ast)))
+  
 (defn get-nr-of-defns [seq]
   (map #(nr-of-defns (create-ast (% :src))) seq))
 
-;dont call it merge: shadows a core function
-; Fix me: next func should be generalised
-(defn merge
-  "Merge 2 sequences into list of maps with given labels"
-  [seq1 label1 seq2 label2]
-  (map (fn [x y] {(keyword label1) x (keyword label2) y}) seq1 seq2))
+(defn get-nr-of-commented-defns [seq]
+  (map #(nr-of-commented-defns (create-ast (% :src))) seq))
 
 (defn -main [& [args]]
   (let [dir (if args args ".")
         clj-files (read-all-clj-files dir)]
-    (println (json/encode (merge (get-paths clj-files) "path"
-                                 (get-nr-of-lines clj-files) "loc")
+    (println (json/encode (merge-seq (get-paths clj-files) "path"
+                                     (get-nr-of-lines clj-files) "loc")
                           :indent 2))
-    (println (get-nr-of-defns clj-files))))
+    (println (json/encode (merge-seq (get-nr-of-defns clj-files) "defns"
+                                     (get-nr-of-commented-defns clj-files) "cdefns")
+                          :indent 2))))
