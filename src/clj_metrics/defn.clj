@@ -13,7 +13,12 @@
   [func]
   (-> func eval meta :doc))
 
-(defn has-comment?
+(defn has-comment
   "Returns true if func has a comment string, otherwise false"
   [func]
   (not (str-utils/blank? (get-comment func))))
+
+(defn has-comment?
+  "Returns true if func has a comment string, otherwise false"
+  [func]
+  (string? (nth func 2)))

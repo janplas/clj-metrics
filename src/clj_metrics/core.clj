@@ -76,12 +76,14 @@
 (defn get-nr-of-commented-defns [seq]
   (map #(nr-of-commented-defns (create-ast (% :src))) seq))
 
+(defn dump-json [clj-files]
+  (println (json/encode (merge-seq [:path (get-paths clj-files)]
+                                   [:loc (get-nr-of-lines clj-files)]
+                                   [:defns (get-nr-of-defns clj-files)]
+                                   [:cdefns (get-nr-of-commented-defns clj-files)])
+                        :indent 2)))
+
 (defn -main [& [args]]
   (let [dir (if args args ".")
         clj-files (read-all-clj-files dir)]
-    (println (json/encode (merge-seq (get-paths clj-files) "path"
-                                     (get-nr-of-lines clj-files) "loc")
-                          :indent 2))
-    (println (json/encode (merge-seq (get-nr-of-defns clj-files) "defns"
-                                     (get-nr-of-commented-defns clj-files) "cdefns")
-                          :indent 2))))
+    (dump-json clj-files)))
