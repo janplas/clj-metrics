@@ -49,7 +49,7 @@
 (defn- create-ast
   "Create a kind of abstract syntax tree"
   [source]
-  (read-string (str "(" source ")")))
+  (read-string (str "(" source "\n)")))
 
 (defn nr-of-toplevel-symbols
   [ast symbol-name]
