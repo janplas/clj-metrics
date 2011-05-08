@@ -10,3 +10,9 @@
   "Returns true if func has a comment string, otherwise false"
   [func]
   (string? (nth func 2)))
+
+(defn get-comment
+  "Return a function's documentation string"
+  [func]
+  (if (has-comment? func) (nth func 2)))
+
